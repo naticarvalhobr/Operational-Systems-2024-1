@@ -53,7 +53,7 @@ int main() {
             printf("Letra incorreta!\n");
             jogo1.tentativas_restantes--; // Decresce a quantidade de tentativas restantes
         }
-        pthread_mutex_unlock(&jogo1.lock); // Liberar acesso ao jogo1
+        pthread_mutex_unlock(&jogo1.lock); // Liberar acesso ao jogo1 para que outros acessem a palavra secreta
 
         // Jogador 2
         pthread_mutex_lock(&jogo2.lock); // Bloquear acesso ao jogo2
@@ -93,7 +93,7 @@ void inicializar_jogo(Jogo *jogo, const char *palavras[], int num_palavras) {
     memset(jogo->letras_adivinhadas, '_', strlen(jogo->palavra)); // preenche a listra de letras adivinhadas com underlines
     jogo->letras_adivinhadas[strlen(jogo->palavra)] = '\0';  // garante que a string 'letras_adivinhadas' termine com o caractere nulo, mostrando onde ela termina
     jogo->tentativas_restantes = MAX_TENTATIVAS; // inicializa o numero de tentativas restantes
-    pthread_mutex_init(&jogo->lock, NULL); // Inicializar o mutex para controle de acesso à palavra
+    pthread_mutex_init(&jogo->lock, NULL); // Inicializar o mutex para controle de acesso à palavra. Um mutex é inicializado para cada instância da struct 'Jogo'.
 }
 
 // Escolhe aleatoriamente uma palavra da lista de palavras disponíveis
@@ -140,4 +140,3 @@ void limpar_buffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
-
